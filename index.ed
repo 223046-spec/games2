@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>連打ゲーム</title>
+<style>
+  /* ===== ここを変えると見た目がかわる ===== */
+  :root {
+    --bg: #FFF0F6;        /* 背景の色 */
+    --main: #E5679E;      /* ボタンの色 */
+    --text: #3A2F40;      /* 文字の色 */
+  }
+  /* ====================================== */
+  body { margin: 0; font-family: "Hiragino Sans", "BIZ UDPGothic", sans-serif; background: var(--bg); color: var(--text); text-align: center; padding: 40px 16px; }
+  h1 { font-size: 1.6rem; margin: 0 0 8px; }
+  p { margin: 6px 0; }
+  .num { font-size: 4rem; font-weight: bold; margin: 12px 0; }
+  button { font-size: 1.6rem; padding: 26px 40px; border: none; border-radius: 999px; background: var(--main); color: #fff; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+  button:active { transform: scale(0.94); }
+  #result { font-size: 1.2rem; font-weight: bold; min-height: 2em; margin-top: 18px; }
+</style>
+</head>
+<body>
+
+<!-- ===== ここを変えるとゲームの内容がかわる ===== -->
+<h1>🍓 いちご連打ゲーム</h1>
+<p>10秒でなんこ食べられる?</p>
+<!-- ============================================ -->
+
+<div class="num" id="count">0</div>
+<p>のこり <span id="time">10</span> 秒</p>
+<button id="btn">🍓 タップ!</button>
+<div id="result"></div>
+
+<script>
+  // ===== ここを変えると難しさやメッセージがかわる =====
+  var LIMIT = 10;   // 制限時間(秒)
+  function message(n) {
+    if (n >= 60) return "🏆 伝説の連打神!";
+    if (n >= 40) return "🌟 すごい!プロ級!";
+    if (n >= 20) return "😊 なかなかやるね";
+    return "🐢 もう1回チャレンジ!";
+  }
+  // ================================================
+
+  var count = 0, time = LIMIT, timer = null, playing = false;
+  var btn = document.getElementById("btn");
+
+  btn.addEventListener("click", function () {
+    if (!playing) { start(); }
+    count++;
+    document.getElementById("count").textContent = count;
+  });
+
+  function start() {
+    playing = true; count = 0; time = LIMIT;
+    document.getElementById("result").textContent = "";
+    timer = setInterval(function () {
+      time--;
+      document.getElementById("time").textContent = time;
+      if (time <= 0) { finish(); }
+    }, 1000);
+  }
+
+  function finish() {
+    clearInterval(timer); playing = false;
+    document.getElementById("result").textContent = count + "回! " + message(count);
+    btn.textContent = "もう1回";
+  }
+</script>
+</body>
+</html>
